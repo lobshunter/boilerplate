@@ -9,6 +9,9 @@ linters-settings:
     min-complexity: 15
   govet:
     enable-all: true
+  gosec:
+    excludes:
+      - G107 # HTTP request url is variable, like `var url = xxx`
   revive:
     ignore-generated-header: true
     severity: "warning"
@@ -47,7 +50,8 @@ linters:
 
     # security
     - bodyclose
-    # - gosec
+    - sqlclosecheck
+    - gosec
 
     # performance
     - prealloc
@@ -55,6 +59,6 @@ linters:
     # misc
     - govet
     - revive
+    - gocritic
+    - gomnd # magic number
     - misspell
-    - unparam # unused parameters
-    - gomnd
