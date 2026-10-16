@@ -1,69 +1,89 @@
+version: "2"
 run:
-  skip-dirs:
-    - "bin"
-
-linters-settings:
-  gocyclo:
-    min-complexity: 10
-  gocognit:
-    min-complexity: 15
-  govet:
-    enable-all: true
-    disable:
-      - fieldalignment
-  gosec:
-    excludes:
-      - G107 # HTTP request url is variable, like `var url = xxx`
-  revive:
-    ignore-generated-header: true
-    severity: "warning"
-    rules:
-      - name: blank-imports
-      - name: context-as-argument
-      - name: context-keys-type
-      - name: dot-imports
-      - name: error-return
-      - name: error-strings
-      - name: error-naming
-      # - name: exported
-      - name: if-return
-      - name: increment-decrement
-      - name: var-naming
-      - name: var-declaration
-      - name: package-comments
-      - name: range
-      - name: receiver-naming
-      - name: time-naming
-      - name: unexported-return
-      - name: indent-error-flow
-      - name: errorf
-      - name: empty-block
-      - name: superfluous-else
-      - name: unused-parameter
-      - name: unreachable-code
-      - name: redefines-builtin-id
+  timeout: 5m
 
 linters:
-  disable-all: false
-
+  default: standard
   enable:
     # code complexity
     - gocyclo
     - gocognit
-
-    # security
+    # bug prone
     - bodyclose
     - sqlclosecheck
     - gosec
-
-    # performance
     - prealloc
-
-    # misc
     - govet
     - revive
     - gocritic
-    # - gomnd # magic number
+    - copyloopvar
+    - nilnesserr
+    - recvcheck
+    - ineffassign
+    - mirror
+    - exhaustive
+    # styling
+    - dupl
     - misspell
-    # - gomoddirectives # go module
-    - exportloopref # exporting pointers for loop variables(bug)
+    - importas
+    # enable when necessary
+    # - exhaustruct_v5
+    # - loggercheck
+    # - bidichk
+  settings:
+    exhaustive:
+      check:
+        - switch
+        - mapliteral
+    nolintlint:
+      require-explanation: true
+      require-specific: true
+    gocyclo:
+      min-complexity: 10
+    gocognit:
+      min-complexity: 15
+    govet:
+      enable-all: true
+      disable:
+        - fieldalignment
+    gosec:
+      excludes:
+        - G107 # HTTP request url is variable, like `var url = xxx`
+    revive:
+      severity: "warning"
+      rules:
+        - name: blank-imports
+        - name: context-as-argument
+        - name: context-keys-type
+        - name: dot-imports
+        - name: error-return
+        - name: error-strings
+        - name: error-naming
+        # - name: exported
+        - name: if-return
+        - name: increment-decrement
+        - name: var-naming
+        - name: var-declaration
+        - name: package-comments
+        - name: range
+        - name: receiver-naming
+        - name: time-naming
+        - name: unexported-return
+        - name: indent-error-flow
+        - name: errorf
+        - name: empty-block
+        - name: superfluous-else
+        - name: unused-parameter
+        - name: unreachable-code
+        - name: redefines-builtin-id
+  exclusions:
+    paths:
+      - ^bin/
+
+issues:
+  max-issues-per-linter: 0
+  max-same-issues: 0
+
+formatters:
+  enable:
+    - gofmt
